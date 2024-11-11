@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ZoomImage = ({ imageUrl, onClose }) => {
+  console.log("Image Url:", imageUrl)
   return (
     <Dialog open={Boolean(imageUrl)} onClose={onClose} maxWidth="lg">
       <DialogContent>
@@ -95,14 +96,13 @@ const PatientProfile = ({ data }) => {
 
         const uniqueDoctorIds = [...new Set(patientData.map(patient => patient.doctor_id))];
         const doctorPromises = uniqueDoctorIds.map(doctorId => getUser(doctorId));
-        console.log(doctorPromises)
+
         const doctors = await Promise.all(doctorPromises);
         const doctorDetailsMap = {};
         uniqueDoctorIds.forEach((doctorId, index) => {
           doctorDetailsMap[doctorId] = doctors[index];
         });
         setDoctorDetails(doctorDetailsMap);
-        console.log("doctors detail:", doctorDetails)
       } catch (error) {
         console.error("Error fetching patients:", error);
       }
@@ -133,7 +133,6 @@ const PatientProfile = ({ data }) => {
   };
   // MEDIA BASE URL
   const mediaBaseUrl = 'http://localhost:8000/media/raw/';
-  console.log(doctorDetails)
 
   return (
     <>
@@ -186,41 +185,49 @@ const PatientProfile = ({ data }) => {
                       {patient.right_eye_prediction}
                     </TableCell>
                     <TableCell align="center">
-                      
-                    <Tooltip title="View Right Eye">
-                      <span
-                        style={{ cursor: "pointer", color: "#181b62" }}
-                        onClick={() => setZoomedImageUrl(`${mediaBaseUrl}${patient.right_eye_image_url.split('\\').pop()}`)}
-                      >
-                        <VisibilityIcon sx={{ color: "#181b62" }} />
-                      </span>
+                      <Tooltip title="View Right Eye">
+                        <span
+                          style={{ cursor: "pointer", color: patient.right_eye_image_url ? "#181b62" : "gray" }}
+                          onClick={() => {
+                            if (patient.right_eye_image_url) {
+                              const rightEyeImageName = patient.right_eye_image_url.split('\\').pop();
+                              setZoomedImageUrl(`${mediaBaseUrl}${rightEyeImageName}`);
+                            }
+                          }}
+                        >
+                          <VisibilityIcon sx={{ color: patient.right_eye_image_url ? "#181b62" : "gray" }} />
+                        </span>
                       </Tooltip>
                     </TableCell>
                     <TableCell align="center">{patient.left_eye_prediction}</TableCell>
                     <TableCell align="center">
-                      
-                    <Tooltip title="View Left Eye">
-                      <span
-                        style={{ cursor: "pointer", color: "#181b62" }}
-                        onClick={() => setZoomedImageUrl(`${mediaBaseUrl}${patient.left_eye_image_url.split('\\').pop()}`)}
-                      >
-                        <VisibilityIcon sx={{ color: "#181b62" }} />
-                      </span>
+                      <Tooltip title="View Left Eye">
+                        <span
+                          style={{ cursor: "pointer", color: patient.left_eye_image_url ? "#181b62" : "gray" }}
+                          onClick={() => {
+                            if (patient.left_eye_image_url) {
+                              const leftEyeImageName = patient.left_eye_image_url.split('\\').pop();
+                              setZoomedImageUrl(`${mediaBaseUrl}${leftEyeImageName}`);
+                            }
+                          }}
+                        >
+                          <VisibilityIcon sx={{ color: patient.left_eye_image_url ? "#181b62" : "gray" }} />
+                        </span>
                       </Tooltip>
                     </TableCell>
                     <TableCell align="center">
                       {doctorDetails[patient.doctor_id] ? (
                         <>
                           {doctorDetails[patient.doctor_id].first_name} {doctorDetails[patient.doctor_id].last_name}
-
                         </>
                       ) : (
-                        <p>Loading doctor details...</p> 
+                        <p>Loading doctor details...</p>
                       )}
                     </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
+
           </StyledTable>
 
 

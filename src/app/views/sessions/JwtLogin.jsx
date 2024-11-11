@@ -7,6 +7,7 @@ import * as Yup from "yup";
 
 import useAuth from "app/hooks/useAuth";
 import { Paragraph } from "app/components/Typography";
+import Brand from "app/components/Brand";
 
 const FlexBox = styled(Box)(() => ({
   display: "flex"
@@ -67,12 +68,12 @@ export default function JwtLogin() {
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
-      await login(values.email, values.password); 
+      await login(values.email, values.password);
       navigate("/dashboard/");
     } catch (e) {
       console.error("Login failed:", e);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -82,12 +83,15 @@ export default function JwtLogin() {
         <Grid container>
           <Grid item sm={6} xs={12}>
             <div className="img-wrapper">
-              <img src="/assets/images/screening.png" style={{ borderRadius: 20 }} width="100%" alt="" />
+              <img src="/assets/images/screening.gif" style={{ borderRadius: 20 }} width="100%" alt="" />
             </div>
           </Grid>
 
           <Grid item sm={6} xs={12}>
-            <ContentBox style={{ marginTop: 50 }}>
+            <Box display="flex" justifyContent="center" mt={5} ml={-3} >
+              <Brand />
+            </Box>
+            <ContentBox >
               <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}
@@ -123,35 +127,17 @@ export default function JwtLogin() {
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
                     />
-
-                    <FlexBox justifyContent="space-between">
-                      <FlexBox gap={1}>
-                        <Checkbox
-                          size="small"
-                          name="remember"
-                          onChange={handleChange}
-                          checked={values.remember}
-                          sx={{ padding: 0 }}
-                        />
-
-                        <Paragraph>Remember Me</Paragraph>
-                      </FlexBox>
-
-                      <NavLink
-                        to="/session/forgot-password"
-                        style={{ color: theme.palette.primary.main}}>
-                        Forgot password?
-                      </NavLink>
-                    </FlexBox>
-
-                    <LoadingButton
-                      type="submit"
-                      color="primary"
-                      loading={loading}
-                      variant="contained"
-                      sx={{ my: 2 }}>
-                      Login
-                    </LoadingButton>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                      <LoadingButton
+                        type="submit"
+                        style={{ backgroundColor: '#181b62' }}
+                        loading={loading}
+                        variant="contained"
+                        sx={{ my: 2, borderRadius: 5, width: '60%' }}
+                      >
+                        Login
+                      </LoadingButton>
+                    </div>
                   </form>
                 )}
               </Formik>

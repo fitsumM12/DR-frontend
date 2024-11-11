@@ -107,13 +107,18 @@ function PatientForm() {
     region: "region",
     zone: "zone",
     kebele: "kebele",
+    doctor_id: user.id,
+    health_institution: user.health_institution.id
+  };
+  const initialPredictionForm = {
     left_eye_image_url: "",
     right_eye_image_url: "",
     left_eye_prediction: [],
     right_eye_prediction: [],
-    doctor_id: user.id,
-    health_institution: user.health_institution.id
+    patient_id: state.new_screening ? state.currentPatientId : null,
+    doctor_id: user.id
   };
+
 
   useEffect(() => {
     if (state.new_screening) {
@@ -125,14 +130,7 @@ function PatientForm() {
       }
     };
   }, [state.new_screening, dispatch]);
-  const initialPredictionForm = {
-    left_eye_image_url: "",
-    right_eye_image_url: "",
-    left_eye_prediction: [],
-    right_eye_prediction: [],
-    patient_id: state.new_screening ? state.currentPatientId : null,
-    doctor_id: user.id
-  };
+ 
   const handleOpenDialog = () => {
     setDialogOpen(true)
   }
