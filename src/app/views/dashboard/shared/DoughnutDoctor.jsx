@@ -18,7 +18,7 @@ export const DoctorDoughnut = () => {
         const patientData = await newandreturning();
         setNewPatient(patientData.new_patients)
         setReturningPatient(patientData.returning_patients)
-        console.log(patientData)
+        // console.log(patientData)
       } catch (error) {
         console.error("Error fetching patients:", error);
       }
@@ -35,7 +35,7 @@ export const DoctorDoughnut = () => {
         setAbnormalCount(response.abnormal_patients_count)
       }
       catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     }
     fetchCount()
@@ -49,7 +49,7 @@ export const DoctorDoughnut = () => {
         setFemaleCount(response.female_count);
       }
       catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     }
     fetchGender()

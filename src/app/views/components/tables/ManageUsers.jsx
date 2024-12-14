@@ -58,7 +58,7 @@ export default function ManageUser() {
             await blockUser(userId);
             setChange(true)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     };
 
@@ -67,7 +67,7 @@ export default function ManageUser() {
             await approveUser(userId);
             setChange(true)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     };
 
@@ -76,7 +76,7 @@ export default function ManageUser() {
             await deleteUser(userId);
             setChange(true)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     };
     const handleUserView = (userId) => {

@@ -101,7 +101,7 @@ function ImageUploadForm() {
       })
       .then(data => {
         setResponses(data);
-        console.log('Form submitted successfully:', data);
+        // console.log('Form submitted successfully:', data);
       })
       .catch(error => {
         console.error('There was a problem submitting the form:', error);

@@ -47,7 +47,7 @@ const MonthlyTrend = () => {
   const handleYearChange = (newYear) => {
     setSelectedYear(newYear.year());
   };
-  console.log(monthlyPatient)
+  console.log("monthly data",chartData)
 
   return (
     <Grid container spacing={3}>

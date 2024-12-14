@@ -55,7 +55,7 @@ export default function StatCards() {
         setNormalCount(response.normal_patients_count);
         setAbnormalCount(response.abnormal_patients_count);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchCount();

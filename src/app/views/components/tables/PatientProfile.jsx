@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ZoomImage = ({ imageUrl, onClose }) => {
-  console.log("Image Url:", imageUrl)
+  // console.log("Image Url:", imageUrl)
   return (
     <Dialog open={Boolean(imageUrl)} onClose={onClose} maxWidth="lg">
       <DialogContent>
@@ -111,7 +111,7 @@ const PatientProfile = ({ data }) => {
     fetchPatients();
   }, [data]);
   useEffect(() => {
-    console.log("Updated doctor details:", doctorDetails);
+    // console.log("Updated doctor details:", doctorDetails);
   }, [doctorDetails]);
 
   const [searchQuery, setSearchQuery] = useState('');

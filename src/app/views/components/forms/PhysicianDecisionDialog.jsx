@@ -14,7 +14,7 @@ const PhysicianDecisionDialog = ({ open, onClose, Result }) => {
   const [approval, setApproval] = useState(true);
   const [feedback, setFeedback] = useState('');
   const [disease, setDisease] = useState('');
-  console.log("id", Result)
+  // console.log("id", Result)
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('approval', approval);

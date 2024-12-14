@@ -94,6 +94,7 @@ function PatientForm() {
     right_eye: null,
   });
   const { user } = useAuth()
+  // console.log(user)
   const { state, dispatch } = useAppContext()
 
   const initialFormData = {
