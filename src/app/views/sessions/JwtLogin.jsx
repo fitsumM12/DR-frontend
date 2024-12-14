@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Card, Checkbox, Grid, TextField, Box, styled, useTheme } from "@mui/material";
+import { Card, Grid, TextField, Box, styled, useTheme } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -62,15 +62,18 @@ export default function JwtLogin() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // Added error state
 
   const { login } = useAuth();
 
   const handleFormSubmit = async (values) => {
     setLoading(true);
+    setErrorMessage(""); // Reset error message before attempt
     try {
       await login(values.email, values.password);
-      navigate("/dashboard/");
+      navigate("/DR/dashboard/"); // Ensure "/DR" is included
     } catch (e) {
+      setErrorMessage("Login failed. Please check your credentials.");
       console.error("Login failed:", e);
     } finally {
       setLoading(false);
@@ -88,14 +91,20 @@ export default function JwtLogin() {
           </Grid>
 
           <Grid item sm={6} xs={12}>
-            <Box display="flex" justifyContent="center" mt={5} ml={-3} >
+            <Box display="flex" justifyContent="center" mt={5} ml={-3}>
               <Brand />
             </Box>
-            <ContentBox >
+            <ContentBox>
+              {errorMessage && (
+                <Box sx={{ mb: 2, color: "red", textAlign: "center" }}>
+                  {errorMessage}
+                </Box>
+              )}
               <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}
-                validationSchema={validationSchema}>
+                validationSchema={validationSchema}
+              >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
                     <TextField
@@ -127,7 +136,7 @@ export default function JwtLogin() {
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
                     />
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                       <LoadingButton
                         type="submit"
                         style={{ backgroundColor: '#181b62' }}
