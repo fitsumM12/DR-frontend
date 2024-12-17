@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for your API
-const API_PATIENT_URL = 'http://127.0.0.1:8000/api/patients/';
+const API_PATIENT_URL = `${process.env.REACT_APP_SERVER_IP}/api/patients/`;
 const token = localStorage.getItem('token');
 
 

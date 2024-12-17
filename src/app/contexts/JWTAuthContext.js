@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/users/login/", { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_IP}/api/users/login/`, { email, password });
       const { user, token,refresh_token } = response.data;
       localStorage.setItem('token', token); 
       localStorage.setItem('refresh_token', refresh_token); 

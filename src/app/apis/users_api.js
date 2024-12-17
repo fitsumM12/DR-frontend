@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_USER_URL = "http://127.0.0.1:8000/api/users";
-const API_INST_URL = "http://127.0.0.1:8000/api/institute";
+const API_USER_URL = `${process.env.REACT_APP_SERVER_IP}/api/users`;
+const API_INST_URL = `${process.env.REACT_APP_SERVER_IP}/api/institute`;
 const token = localStorage.getItem('token');
 
 // UPLOAD FILES

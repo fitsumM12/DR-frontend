@@ -91,7 +91,7 @@ function ImageUploadForm() {
     data.append('kebele', formData.kebele);
     data.append('image', formData.image);
 
-    axios.post('http://127.0.0.1:8000/api/predicts/', data)
+    axios.post(`${process.env.REACT_APP_SERVER_IP}/api/predicts/`, data)
       .then(response => {
         if (response.status === 200) {
           return response.data;

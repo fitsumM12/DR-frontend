@@ -132,7 +132,7 @@ const PatientProfile = ({ data }) => {
     navigate('/newcase/')
   };
   // MEDIA BASE URL
-  const mediaBaseUrl = 'http://localhost:8000/media/raw/';
+  const mediaBaseUrl = `${process.env.REACT_APP_SERVER_IP}/media/raw/`;
 
   return (
     <>
