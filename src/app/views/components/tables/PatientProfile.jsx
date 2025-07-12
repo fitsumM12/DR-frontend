@@ -107,7 +107,6 @@ const PatientProfile = ({ data }) => {
         console.error("Error fetching patients:", error);
       }
     };
-
     fetchPatients();
   }, [data]);
   useEffect(() => {
@@ -129,10 +128,10 @@ const PatientProfile = ({ data }) => {
   };
   const handleNewScreening = (id) => {
     dispatch({ type: 'START_NEW_SCREENING', payload: id });
-    navigate('/newcase/')
+    navigate('/DR/newcase/')
   };
   // MEDIA BASE URL
-  const mediaBaseUrl = `${process.env.REACT_APP_SERVER_IP}/media/raw/`;
+  const mediaBaseUrl = `${process.env.REACT_APP_SERVER_IP}`;
 
   return (
     <>

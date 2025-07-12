@@ -67,8 +67,8 @@ const dropzoneStyle = {
 }
 
 const diagnosisLabels = {
-  0: "Normal",
-  1: "Non Proliferative DR",
+  0: "Non Proliferative DR",
+  1: "Normal",
   2: "Proliferative DR"
 };
 const getLargestIndex = (predictionArray) => {
@@ -131,7 +131,7 @@ function PatientForm() {
       }
     };
   }, [state.new_screening, dispatch]);
- 
+
   const handleOpenDialog = () => {
     setDialogOpen(true)
   }
@@ -167,7 +167,7 @@ function PatientForm() {
   const handleEyeChange = (event) => {
     setEyeSide(event.target.value);
   };
-  
+
   const predictImageForEye = async (imageFile) => {
     try {
       setIsLoading(true);
@@ -184,23 +184,22 @@ function PatientForm() {
   };
 
 
- 
+
   const handleDiagnose = async () => {
     if (!leftEyePreview && !rightEyePreview) {
       window.alert("Please provide either a left or right eye image for diagnosis.");
-      return; 
+      return;
     }
-  
+
     setIsLoading(true);
     let predictionsResult = {
       left_eye: null,
       right_eye: null,
     };
     let response = null;
-  
+
     const handlePrediction = async (eye, preview) => {
       const prediction = await predictImageForEye(preview);
-
       if (prediction) {
         setPredictions((prev) => ({
           ...prev,
@@ -209,7 +208,7 @@ function PatientForm() {
         predictionsResult[eye] = prediction;
       }
     };
-  
+
     try {
       const predictionPromises = [];
       if (leftEyePreview) {
@@ -219,7 +218,7 @@ function PatientForm() {
         predictionPromises.push(handlePrediction('right_eye', rightEyePreview));
       }
       await Promise.all(predictionPromises);
-  
+
       const updatedFormData = {
         ...formData,
         left_eye_prediction: predictionsResult.left_eye ? predictionsResult.left_eye.predictions : [],
@@ -227,22 +226,22 @@ function PatientForm() {
         left_eye_image_url: predictionsResult.left_eye ? predictionsResult.left_eye.image_url : formData.left_eye_image_url,
         right_eye_image_url: predictionsResult.right_eye ? predictionsResult.right_eye.image_url : formData.right_eye_image_url,
       };
-      console.log(updatedFormData)
-      const leftEyePrediction = updatedFormData.left_eye_prediction[0];
-      const rightEyePrediction = updatedFormData.right_eye_prediction[0];
+
+      const leftEyePrediction = updatedFormData.left_eye_prediction;
+      const rightEyePrediction = updatedFormData.right_eye_prediction;
       let leftEyeDiagnosis = "Prediction data is missing";
       let rightEyeDiagnosis = "Prediction data is missing";
-  
+
       if (isPredictionValid(leftEyePrediction)) {
-        const leftEyeIndex = getLargestIndex(leftEyePrediction);
+        const leftEyeIndex = getLargestIndex(leftEyePrediction[0]);
         leftEyeDiagnosis = diagnosisLabels[leftEyeIndex];
       }
-  
+
       if (isPredictionValid(rightEyePrediction)) {
-        const rightEyeIndex = getLargestIndex(rightEyePrediction);
+        const rightEyeIndex = getLargestIndex(rightEyePrediction[0]);
         rightEyeDiagnosis = diagnosisLabels[rightEyeIndex];
       }
-  
+
       const updatedPredictionData = {
         ...predictionForm,
         left_eye_prediction: leftEyeDiagnosis,
@@ -250,25 +249,26 @@ function PatientForm() {
         left_eye_image_url: updatedFormData.left_eye_image_url,
         right_eye_image_url: updatedFormData.right_eye_image_url,
       };
-  
+
       response = await submitImageAndPrediction(updatedPredictionData);
       setRes(response);
-  
+
     } catch (error) {
       console.error("Error during diagnosis or updating patient data:", error);
     } finally {
       setIsLoading(false);
     }
   };
-  
+
 
 
   const handleShowImageSection = async () => {
     if (!formData.gender) {
-      setGenderError(true); 
+      setGenderError(true);
       return;
     }
-    
+  
+    setIsLoading(true);
     try {
       const response = await submitFormData(formData);
       const patientId = response.id;
@@ -279,14 +279,16 @@ function PatientForm() {
       }));
       setPredictionForm((prev) => ({
         ...prev,
-        patient_id: patientId
+        patient_id: patientId,
       }));
       setShowImageSection(true);
     } catch (error) {
       console.error("Error saving patient data:", error);
+      window.alert("Failed to save patient data. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
-  
   return (
     <Container>
       <Stack spacing={3}>
@@ -383,10 +385,10 @@ function PatientForm() {
                     />
                   </RadioGroup>
                   {genderError && (
-                  <FormHelperText error sx={{ mb: 2 }}>
-                    Please select a gender
-                  </FormHelperText>
-                )}
+                    <FormHelperText error sx={{ mb: 2 }}>
+                      Please select a gender
+                    </FormHelperText>
+                  )}
                   <TextField
                     type="text"
                     name="region"
@@ -529,7 +531,7 @@ function PatientForm() {
                   <Box component="section" sx={{ p: 2, border: '1px dashed darkblue', borderRadius: '5px' }}>
                     <Typography variant="h6" component="div" sx={{ marginBottom: 1, textAlign: 'center' }}>
                       <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <FlipIcon sx={{color:'#fa931d'}}/>               &nbsp;&nbsp;&nbsp;   Diagnosis Result &nbsp;&nbsp;&nbsp;
+                        <FlipIcon sx={{ color: '#fa931d' }} />               &nbsp;&nbsp;&nbsp;   Diagnosis Result &nbsp;&nbsp;&nbsp;
                         {(predictions.right_eye || predictions.left_eye) && (
                           <>
                             <Tooltip title="Add Feedback">
@@ -554,8 +556,8 @@ function PatientForm() {
                     {(predictions.right_eye || predictions.left_eye) && (
                       <>
                         <AbnormalityDetection
-                          leftData={predictions.left_eye ? predictions.left_eye.predictions[0] : [0]}
-                          rightData={predictions.right_eye ? predictions.right_eye.predictions[0] : [0]}
+                          leftData={predictions.left_eye ? predictions.left_eye.predictions[0] : null}
+                          rightData={predictions.right_eye ? predictions.right_eye.predictions[0] : null}
                         />
                       </>
                     )}

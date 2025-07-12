@@ -93,8 +93,8 @@ const PatientsRecord = () => {
   };
 
   const Severity = {
-    0: "NO DR",
-    1: "NPDR",
+    0: "NPDR",
+    1: "NO DR",
     2: "PLDR",
   };
 
