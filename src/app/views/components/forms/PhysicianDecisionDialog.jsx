@@ -20,7 +20,7 @@ const PhysicianDecisionDialog = ({ open, onClose, Result }) => {
     formData.append('approval', approval);
     formData.append('feedback', feedback);
     formData.append('disease', disease);
-    if (Result && Result.id) {
+    if (Result && Result?.id) {
       formData.append('result', Result.id); 
     }
 
@@ -30,6 +30,12 @@ const PhysicianDecisionDialog = ({ open, onClose, Result }) => {
     } catch (error) {
       console.error("Error submitting decision:", error);
     }
+  };
+
+  const values = {
+    0: 'Non Proliferative DR',
+    1: 'Normal',
+    2: 'Proliferative DR',
   };
 
   return (
@@ -66,14 +72,23 @@ const PhysicianDecisionDialog = ({ open, onClose, Result }) => {
           onChange={(e) => setFeedback(e.target.value)}
         />
         <TextField
+          select
           margin="dense"
-          label="Disease"
-          type="text"
           fullWidth
           variant="outlined"
           value={disease}
           onChange={(e) => setDisease(e.target.value)}
-        />
+          SelectProps={{
+            native: true,
+          }}
+        >
+          <option value="">Select Disease</option>
+          {Object.entries(values).map(([key, label]) => (
+            <option key={key} value={label}>
+              {label}
+            </option>
+          ))}
+        </TextField>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

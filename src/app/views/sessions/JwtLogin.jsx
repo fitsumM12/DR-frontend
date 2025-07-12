@@ -71,7 +71,7 @@ export default function JwtLogin() {
     setErrorMessage(""); // Reset error message before attempt
     try {
       await login(values.email, values.password);
-      navigate("/DR/dashboard/"); // Ensure "/DR" is included
+      navigate("/dashboard/"); // Ensure "/DR" is included
     } catch (e) {
       setErrorMessage("Login failed. Please check your credentials.");
       console.error("Login failed:", e);

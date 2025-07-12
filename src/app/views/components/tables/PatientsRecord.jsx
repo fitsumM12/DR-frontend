@@ -64,7 +64,7 @@ const PatientsRecord = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const patientData = await fetchPatientForDoctor(doctor.user.health_institution.id);
+        const patientData = await fetchPatientForDoctor(doctor?.user?.health_institution?.id);
         setPatients(patientData);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -170,7 +170,7 @@ const PatientsRecord = () => {
                         <TableCell align="right">
                           <Tooltip title="View">
                             <IconButton
-                              onClick={() => handlePatientView(patient.id)}
+                              onClick={() => handlePatientView(patient?.id)}
                               sx={{ "&:hover": { bgcolor: "grey.200" } }}
                             >
                               <VisibilityIcon sx={{ color: "#fa931d" }} />

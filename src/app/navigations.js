@@ -1,23 +1,19 @@
 export const navigations = [
-  { name: "Dashboard", path: "/DR/dashboard/", icon: "dashboard" },
+  { name: "Dashboard", path: "/dashboard/", icon: "dashboard" },
 
   {
     name: "New Case",
     icon: "person",
-    path: "/DR/newcase"
+    path: "/newcase"
   },
 
   {
     name: "Patient Records",
     icon: "group",
-    path: "/DR/records/"
+    path: "/records/"
   },
 
-  // {
-  //   name: "Manage Users",
-  //   icon: "group",
-  //   path: "/DR/manage_users/"
-  // },
+
 
   {
     name: "About us",

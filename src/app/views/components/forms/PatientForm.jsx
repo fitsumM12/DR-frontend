@@ -1,17 +1,12 @@
-import FlipIcon from '@mui/icons-material/Flip';
+import FlipIcon from "@mui/icons-material/Flip";
 import {
   FormControlLabel,
-
   FormHelperText,
-
   FormLabel,
-
   IconButton,
-
   Radio,
   RadioGroup,
   Tooltip,
-
 } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
@@ -23,13 +18,18 @@ import {
   Select,
   Grid,
   styled,
-  CircularProgress, Box,
+  CircularProgress,
+  Box,
   Stack,
 } from "@mui/material";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { Span } from "app/components/Typography";
 import { useDropzone } from "react-dropzone";
-import { predictImage, submitFormData, submitImageAndPrediction } from "app/apis/patients_api";
+import {
+  predictImage,
+  submitFormData,
+  submitImageAndPrediction,
+} from "app/apis/patients_api";
 import { SimpleCard } from "app/components";
 import useAuth from "app/hooks/useAuth";
 import { PredictionResult, AbnormalityDetection } from "./PredictionResult";
@@ -64,12 +64,12 @@ const dropzoneStyle = {
   marginBottom: "10px",
   height: "50px",
   backgroundColor: "#f0f8ff",
-}
+};
 
 const diagnosisLabels = {
   0: "Non Proliferative DR",
   1: "Normal",
-  2: "Proliferative DR"
+  2: "Proliferative DR",
 };
 const getLargestIndex = (predictionArray) => {
   return predictionArray.indexOf(Math.max(...predictionArray));
@@ -79,7 +79,6 @@ const isPredictionValid = (predictionArray) => {
   return Array.isArray(predictionArray) && predictionArray.length > 0;
 };
 
-
 function PatientForm() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -88,14 +87,15 @@ function PatientForm() {
   const [rightEyePreview, setRightEyePreview] = useState(null);
   const [showImageSection, setShowImageSection] = useState(false);
   const [genderError, setGenderError] = useState(false);
-  const [res, setRes] = useState({})
+  const [res, setRes] = useState({});
   const [predictions, setPredictions] = useState({
     left_eye: null,
     right_eye: null,
   });
-  const { user } = useAuth()
+  const { user } = useAuth();
   // console.log(user)
-  const { state, dispatch } = useAppContext()
+  const { state, dispatch } = useAppContext();
+  console.log("user:", user);
 
   const initialFormData = {
     first_name: "",
@@ -108,18 +108,17 @@ function PatientForm() {
     region: "region",
     zone: "zone",
     kebele: "kebele",
-    doctor_id: user.id,
-    health_institution: user.health_institution.id
+    doctor_id: user?.id,
+    health_institution: user?.health_institution?.id,
   };
   const initialPredictionForm = {
     left_eye_image_url: "",
     right_eye_image_url: "",
     left_eye_prediction: [],
     right_eye_prediction: [],
-    patient_id: state.new_screening ? state.currentPatientId : null,
-    doctor_id: user.id
+    patient_id: state.new_screening ? state?.currentPatientId : null,
+    doctor_id: user?.id,
   };
-
 
   useEffect(() => {
     if (state.new_screening) {
@@ -127,21 +126,20 @@ function PatientForm() {
     }
     return () => {
       if (state.new_screening) {
-        dispatch({ type: 'STOP_NEW_SCREENING' });
+        dispatch({ type: "STOP_NEW_SCREENING" });
       }
     };
   }, [state.new_screening, dispatch]);
 
   const handleOpenDialog = () => {
-    setDialogOpen(true)
-  }
+    setDialogOpen(true);
+  };
   const handleCloseDialog = () => {
-    setDialogOpen(false)
-  }
+    setDialogOpen(false);
+  };
 
   const [formData, setFormData] = useState(initialFormData);
   const [predictionForm, setPredictionForm] = useState(initialPredictionForm);
-
 
   const onDrop = (acceptedFiles) => {
     const imageFiles = acceptedFiles.filter((file) =>
@@ -183,11 +181,11 @@ function PatientForm() {
     }
   };
 
-
-
   const handleDiagnose = async () => {
     if (!leftEyePreview && !rightEyePreview) {
-      window.alert("Please provide either a left or right eye image for diagnosis.");
+      window.alert(
+        "Please provide either a left or right eye image for diagnosis."
+      );
       return;
     }
 
@@ -212,19 +210,27 @@ function PatientForm() {
     try {
       const predictionPromises = [];
       if (leftEyePreview) {
-        predictionPromises.push(handlePrediction('left_eye', leftEyePreview));
+        predictionPromises.push(handlePrediction("left_eye", leftEyePreview));
       }
       if (rightEyePreview) {
-        predictionPromises.push(handlePrediction('right_eye', rightEyePreview));
+        predictionPromises.push(handlePrediction("right_eye", rightEyePreview));
       }
       await Promise.all(predictionPromises);
 
       const updatedFormData = {
         ...formData,
-        left_eye_prediction: predictionsResult.left_eye ? predictionsResult.left_eye.predictions : [],
-        right_eye_prediction: predictionsResult.right_eye ? predictionsResult.right_eye.predictions : [],
-        left_eye_image_url: predictionsResult.left_eye ? predictionsResult.left_eye.image_url : formData.left_eye_image_url,
-        right_eye_image_url: predictionsResult.right_eye ? predictionsResult.right_eye.image_url : formData.right_eye_image_url,
+        left_eye_prediction: predictionsResult.left_eye
+          ? predictionsResult.left_eye.predictions
+          : [],
+        right_eye_prediction: predictionsResult.right_eye
+          ? predictionsResult.right_eye.predictions
+          : [],
+        left_eye_image_url: predictionsResult.left_eye
+          ? predictionsResult.left_eye.image_url
+          : formData.left_eye_image_url,
+        right_eye_image_url: predictionsResult.right_eye
+          ? predictionsResult.right_eye.image_url
+          : formData.right_eye_image_url,
       };
 
       const leftEyePrediction = updatedFormData.left_eye_prediction;
@@ -246,13 +252,12 @@ function PatientForm() {
         ...predictionForm,
         left_eye_prediction: leftEyeDiagnosis,
         right_eye_prediction: rightEyeDiagnosis,
-        left_eye_image_url: updatedFormData.left_eye_image_url,
-        right_eye_image_url: updatedFormData.right_eye_image_url,
+        left_eye_image_url: updatedFormData?.left_eye_image_url,
+        right_eye_image_url: updatedFormData?.right_eye_image_url,
       };
 
       response = await submitImageAndPrediction(updatedPredictionData);
       setRes(response);
-
     } catch (error) {
       console.error("Error during diagnosis or updating patient data:", error);
     } finally {
@@ -260,19 +265,17 @@ function PatientForm() {
     }
   };
 
-
-
   const handleShowImageSection = async () => {
     if (!formData.gender) {
       setGenderError(true);
       return;
     }
-  
+
     setIsLoading(true);
     try {
       const response = await submitFormData(formData);
-      const patientId = response.id;
-  
+      const patientId = response?.id;
+
       setFormData((prev) => ({
         ...prev,
         id: patientId,
@@ -344,7 +347,6 @@ function PatientForm() {
                   />
                 </Grid>
                 <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
-
                   <TextField
                     type="date"
                     name="birthdate"
@@ -418,20 +420,19 @@ function PatientForm() {
 
               <Button
                 sx={{
-                  bgcolor: '#181b62',
+                  bgcolor: "#181b62",
                   borderRadius: 2,
-                  '&:hover': {
-                    bgcolor: '#fa931d',
+                  "&:hover": {
+                    bgcolor: "#fa931d",
                   },
                 }}
                 variant="contained"
                 type="submit"
               >
-                <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
+                <Span sx={{ pl: 1, textTransform: "capitalize" }}>
                   Save and Continue
                 </Span>
               </Button>
-
             </ValidatorForm>
           ) : (
             <>
@@ -440,7 +441,9 @@ function PatientForm() {
                   <Grid container spacing={2}>
                     <Grid item lg={2} md={2} sm={4} xs={12} sx={{ mt: 2 }}>
                       <FormControl fullWidth>
-                        <InputLabel id="eye-select-label">Select Eye</InputLabel>
+                        <InputLabel id="eye-select-label">
+                          Select Eye
+                        </InputLabel>
                         <Select
                           labelId="eye-select-label"
                           value={eyeSide}
@@ -456,7 +459,9 @@ function PatientForm() {
                     <Grid item lg={10} md={10} sm={8} xs={12} sx={{ mt: 2 }}>
                       <div {...getRootProps()} style={dropzoneStyle}>
                         <input {...getInputProps()} />
-                        <p>Drag 'n' drop an image here, or click to select one</p>
+                        <p>
+                          Drag 'n' drop an image here, or click to select one
+                        </p>
                       </div>
                     </Grid>
                   </Grid>
@@ -470,10 +475,10 @@ function PatientForm() {
                     onClick={handleDiagnose}
                     disabled={isLoading}
                     sx={{
-                      bgcolor: '#181b62',
+                      bgcolor: "#181b62",
                       borderRadius: 2,
-                      '&:hover': {
-                        bgcolor: '#fa931d',
+                      "&:hover": {
+                        bgcolor: "#fa931d",
                       },
                     }}
                   >
@@ -484,69 +489,110 @@ function PatientForm() {
                 </Grid>
               </Grid>
 
-
               <Grid container spacing={2} sx={{ marginTop: 2 }}>
                 <Grid item xs={12} md={8}>
-
-
-                  <Box component="section" sx={{ p: 2, border: '1px dashed grey', borderRadius: '5px' }}>
+                  <Box
+                    component="section"
+                    sx={{
+                      p: 2,
+                      border: "1px dashed grey",
+                      borderRadius: "5px",
+                    }}
+                  >
                     <Grid container spacing={2}>
                       {/* Left Eye Preview */}
 
                       {leftEyePreview && (
                         <Grid item xs={12} md={6}>
-
-                          <h4 style={{ maxWidth: "80%", maxHeight: "80%", textAlign: 'center' }}>Left Eye</h4>
+                          <h4
+                            style={{
+                              maxWidth: "80%",
+                              maxHeight: "80%",
+                              textAlign: "center",
+                            }}
+                          >
+                            Left Eye
+                          </h4>
                           <>
                             <Zoom>
                               <img
                                 src={URL.createObjectURL(leftEyePreview)}
                                 alt="Left Eye"
-                                style={{ maxWidth: "80%", maxHeight: "80%", cursor: "pointer" }}
+                                style={{
+                                  maxWidth: "80%",
+                                  maxHeight: "80%",
+                                  cursor: "pointer",
+                                }}
                               />
                             </Zoom>
                           </>
                         </Grid>
-                      )}<></>
+                      )}
+                      <></>
 
-                      {rightEyePreview && (<Grid item xs={12} md={6}>
-                        <h4 style={{ maxWidth: "80%", maxHeight: "80%", textAlign: 'center' }}>Right Eye </h4>
+                      {rightEyePreview && (
+                        <Grid item xs={12} md={6}>
+                          <h4
+                            style={{
+                              maxWidth: "80%",
+                              maxHeight: "80%",
+                              textAlign: "center",
+                            }}
+                          >
+                            Right Eye{" "}
+                          </h4>
 
-                        <Zoom>
-                          <img
-                            src={URL.createObjectURL(rightEyePreview)}
-                            alt="Right Eye"
-                            style={{ maxWidth: "80%", maxHeight: "80%" }}
-                          />
-                        </Zoom>
-
-                      </Grid>
+                          <Zoom>
+                            <img
+                              src={URL.createObjectURL(rightEyePreview)}
+                              alt="Right Eye"
+                              style={{ maxWidth: "80%", maxHeight: "80%" }}
+                            />
+                          </Zoom>
+                        </Grid>
                       )}
                     </Grid>
                   </Box>
                 </Grid>
 
                 <Grid item xs={12} md={4}>
-
-                  <Box component="section" sx={{ p: 2, border: '1px dashed darkblue', borderRadius: '5px' }}>
-                    <Typography variant="h6" component="div" sx={{ marginBottom: 1, textAlign: 'center' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <FlipIcon sx={{ color: '#fa931d' }} />               &nbsp;&nbsp;&nbsp;   Diagnosis Result &nbsp;&nbsp;&nbsp;
+                  <Box
+                    component="section"
+                    sx={{
+                      p: 2,
+                      border: "1px dashed darkblue",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      component="div"
+                      sx={{ marginBottom: 1, textAlign: "center" }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <FlipIcon sx={{ color: "#fa931d" }} />{" "}
+                        &nbsp;&nbsp;&nbsp; Diagnosis Result &nbsp;&nbsp;&nbsp;
                         {(predictions.right_eye || predictions.left_eye) && (
                           <>
                             <Tooltip title="Add Feedback">
                               <IconButton
                                 onClick={handleOpenDialog}
-                                sx={{ align: "right", "&:hover": { bgcolor: "grey.200" } }}
+                                sx={{
+                                  align: "right",
+                                  "&:hover": { bgcolor: "grey.200" },
+                                }}
                               >
                                 <AddCircleOutline sx={{ color: "#E53935" }} />
                               </IconButton>
                             </Tooltip>
-                            <PhysicianDecisionDialog open={dialogOpen} onClose={handleCloseDialog} Result={res} />
+                            <PhysicianDecisionDialog
+                              open={dialogOpen}
+                              onClose={handleCloseDialog}
+                              Result={res}
+                            />
                           </>
                         )}
                       </div>
-
                     </Typography>
                     {isLoading && (
                       <div style={{ textAlign: "center" }}>
@@ -556,28 +602,40 @@ function PatientForm() {
                     {(predictions.right_eye || predictions.left_eye) && (
                       <>
                         <AbnormalityDetection
-                          leftData={predictions.left_eye ? predictions.left_eye.predictions[0] : null}
-                          rightData={predictions.right_eye ? predictions.right_eye.predictions[0] : null}
+                          leftData={
+                            predictions.left_eye
+                              ? predictions.left_eye.predictions[0]
+                              : null
+                          }
+                          rightData={
+                            predictions.right_eye
+                              ? predictions.right_eye.predictions[0]
+                              : null
+                          }
                         />
                       </>
                     )}
                     {predictions.left_eye && (
-                      <PredictionResult data={predictions.left_eye.predictions[0]} eye="Left" />
+                      <PredictionResult
+                        data={predictions.left_eye.predictions[0]}
+                        eye="Left"
+                      />
                     )}
                     {predictions.right_eye && (
-                      <PredictionResult data={predictions.right_eye.predictions[0]} eye="Right" />
+                      <PredictionResult
+                        data={predictions.right_eye.predictions[0]}
+                        eye="Right"
+                      />
                     )}
                   </Box>
                 </Grid>
               </Grid>
-
             </>
           )}
         </SimpleCard>
       </Stack>
-    </Container >
+    </Container>
   );
 }
 
 export default PatientForm;
-

@@ -91,7 +91,7 @@ const PatientProfile = ({ data }) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const patientData = await fetchPatientById(data.id);
+        const patientData = await fetchPatientById(data?.id);
         setPatients(patientData);
 
         const uniqueDoctorIds = [...new Set(patientData.map(patient => patient.doctor_id))];
@@ -128,7 +128,7 @@ const PatientProfile = ({ data }) => {
   };
   const handleNewScreening = (id) => {
     dispatch({ type: 'START_NEW_SCREENING', payload: id });
-    navigate('/DR/newcase/')
+    navigate('/newcase/')
   };
   // MEDIA BASE URL
   const mediaBaseUrl = `${process.env.REACT_APP_SERVER_IP}`;

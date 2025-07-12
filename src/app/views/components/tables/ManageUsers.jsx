@@ -118,24 +118,24 @@ export default function ManageUser() {
                                         <TableCell align="center">{user.status}</TableCell>
                                         <TableCell align="right">
                                             <Tooltip title="Block">
-                                                <IconButton onClick={() => handleBlock(user.id)} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>
+                                                <IconButton onClick={() => handleBlock(user?.id)} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>
                                                     <BlockIcon sx={{color:'#fb5f4a'}}/>
                                                 </IconButton>
                                             </Tooltip>
 
                                             <Tooltip title="Approve">
-                                                <IconButton onClick={() => handleApprove(user.id)} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>
+                                                <IconButton onClick={() => handleApprove(user?.id)} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>
                                                     
                                                 <CheckCircleOutlineIcon sx={{color:'green'}}/>
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="View">
-                                                <IconButton onClick={() => handleUserView(user.id)} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>
+                                                <IconButton onClick={() => handleUserView(user?.id)} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>
                                                     <VisibilityIcon sx={{color:'#7c80f1'}}/>
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Delete">
-                                                <IconButton onClick={() => handleDeleteUser(user.id)} sx={{'&:hover': {bgcolor:'grey.200'}}}>
+                                                <IconButton onClick={() => handleDeleteUser(user?.id)} sx={{'&:hover': {bgcolor:'grey.200'}}}>
                                                 <DeleteIcon sx={{color:'red'}}/>
                                                 </IconButton>
                                             </Tooltip>
