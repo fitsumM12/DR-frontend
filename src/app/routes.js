@@ -24,19 +24,19 @@ const routes = [
       </AuthGuard>
     ),
     children: [
-      { path: "/DR/dashboard/", element: <Analytics /> }, // Dashboard Route
-      { path: "/DR/newcase/", element: <PatientForm /> }, // New Case Form
-      { path: "/DR/records/", element: <PatientsRecord /> }, // Patients Records
-      { path: "/DR/user_profile/", element: <ProfilePage /> }, // User Profile
-      { path: "/DR/*", element: <NotFound /> }, // Catch-all for undefined routes under /DR
+      { path: "/dashboard/", element: <Analytics /> }, // Dashboard Route
+      { path: "newcase/", element: <PatientForm /> }, // New Case Form
+      { path: "records/", element: <PatientsRecord /> }, // Patients Records
+      { path: "user_profile/", element: <ProfilePage /> }, // User Profile
+      { path: "*", element: <NotFound /> }, // Catch-all for undefined routes under /DR
     ],
   },
-  { path: "/DR/session/404", element: <NotFound /> },
-  { path: "/DR/session/signin", element: <JwtLogin /> },
-  { path: "/DR/session/signup", element: <JwtRegister /> },
-  { path: "/DR/session/forgot-password", element: <ForgotPassword /> },
-  { path: "/", element: <Navigate to="/DR/dashboard/" /> }, // Default Route, redirect to /DR/dashboard
-  { path: "*", element: <Navigate to="/DR/session/404" /> }, // Catch-all for undefined routes
+  { path: "session/404", element: <NotFound /> },
+  { path: "session/signin", element: <JwtLogin /> },
+  { path: "session/signup", element: <JwtRegister /> },
+  { path: "session/forgot-password", element: <ForgotPassword /> },
+  { path: "/", element: <Navigate to="dashboard/" /> }, // Default Route, redirect to dashboard
+  { path: "*", element: <Navigate to="session/404" /> }, // Catch-all for undefined routes
 ];
 
 export default routes;
