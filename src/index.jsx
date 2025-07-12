@@ -10,7 +10,7 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/deep-eye">
     <App />
   </BrowserRouter>
 );

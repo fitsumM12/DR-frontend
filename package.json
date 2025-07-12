@@ -1,6 +1,7 @@
 {
   "name": "DeepEye-react",
   "version": "4.0.0",
+  "homepage":"deep-eye",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
