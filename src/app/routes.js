@@ -24,7 +24,7 @@ const routes = [
       </AuthGuard>
     ),
     children: [
-      { path: "/dashboard/", element: <Analytics /> }, // Dashboard Route
+      { path: "dashboard/", element: <Analytics /> }, // Dashboard Route
       { path: "newcase/", element: <PatientForm /> }, // New Case Form
       { path: "records/", element: <PatientsRecord /> }, // Patients Records
       { path: "user_profile/", element: <ProfilePage /> }, // User Profile
